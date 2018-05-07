@@ -1,0 +1,47 @@
+Link https://leetcode.com/problems/reorder-list/description/
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reorderList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        head = dummy;
+        int length = getLength(head);
+        while (length >= 3) {
+            ListNode start = head.next;
+            ListNode end = start.next;
+            for (int i = 1; i < length; i++) {
+                head = head.next;
+            }
+            ListNode preNode = head;
+            head = head.next;
+            ListNode target = head;
+            ListNode postNode = target.next;
+            start.next = target;
+            target.next = end;
+            preNode.next = postNode;
+            head = target;
+            length = getLength(head);
+        }
+        return dummy.next;
+    }
+    
+    private int getLength(ListNode head) {
+        int i = 0;
+        ListNode measureNode = head;
+        while (measureNode.next != null) {
+            measureNode = measureNode.next;
+            i++;
+        }
+        return i;
+    }
+}
