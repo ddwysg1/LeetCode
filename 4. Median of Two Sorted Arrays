@@ -1,0 +1,27 @@
+Link:https://leetcode.com/problems/median-of-two-sorted-arrays/description/
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1.length;
+        int n = nums2.length;
+        int l = (m+n+1)/2;
+        int r = (m+n+2)/2;
+        return (getkth(nums1,0,nums2,0,l) + getkth(nums1,0,nums2,0,r)) / 2;
+    }
+    public double getkth(int[] A, int Astart, int[] B, int Bstart, int k) {
+        if (Astart > A.length-1) return B[Bstart+k-1];
+        if (Bstart > B.length-1) return A[Astart+k-1];
+        if (k == 1) return Math.min(A[Astart],B[Bstart]);
+        
+        int Amid = Integer.MAX_VALUE;
+        int Bmid = Integer.MAX_VALUE;
+        if(Astart + k/2 - 1 < A.length) Amid = A[Astart + k/2-1];
+        if(Bstart + k/2 - 1 < B.length) Bmid = B[Bstart + k/2-1];
+        
+        if (Amid < Bmid) {
+            return getkth(A, Astart + k/2, B, Bstart, k - k/2);
+        }
+        else{
+            return getkth(A, Astart, B, Bstart + k/2, k - k/2);
+        }
+    }
+}
