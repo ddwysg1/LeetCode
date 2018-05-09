@@ -1,0 +1,57 @@
+Link: https://leetcode.com/problems/copy-list-with-random-pointer/description/
+/**
+ * Definition for singly-linked list with a random pointer.
+ * class RandomListNode {
+ *     int label;
+ *     RandomListNode next, random;
+ *     RandomListNode(int x) { this.label = x; }
+ * };
+ */
+public class Solution {
+    public RandomListNode copyRandomList(RandomListNode head) {
+        if (head == null) {
+            return null;
+        }   
+        head = copyNodes(head);
+        head = copyRandoms(head);
+        return split(head);
+    }
+    
+    private RandomListNode copyNodes(RandomListNode head) {
+        RandomListNode dummy = new RandomListNode(0);
+        dummy.next = head;
+        while (head != null) {
+            RandomListNode newNode = new RandomListNode(head.label);
+            newNode.random = head.random;
+            newNode.next = head.next;
+            head.next = newNode;
+            head = newNode.next;
+        }
+        return dummy.next;
+    }
+    
+    private RandomListNode copyRandoms(RandomListNode head) {
+        RandomListNode dummy = new RandomListNode(0);
+        dummy.next = head;
+        while (head != null) {
+            if (head.random != null) {
+                head.next.random = head.random.next;   
+            }
+            head = head.next.next;
+        }
+        return dummy.next;
+    }
+    
+    private RandomListNode split(RandomListNode head) {
+        RandomListNode newhead = head.next;
+        while (head != null) {
+            RandomListNode temp = head.next;
+            head.next = temp.next;
+            head = head.next;
+            if (temp.next != null) {
+                temp.next = temp.next.next;
+            }
+        }
+        return newhead;
+    }
+}
