@@ -1,0 +1,64 @@
+Link: https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/description/
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        return buildTree(head);
+    }
+    
+    private TreeNode buildTree(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        if (head.next == null) {
+            return new TreeNode(head.val);
+        }
+        ListNode middle = findMiddle(head);
+        TreeNode node = new TreeNode(middle.val);
+        node.right = buildTree(middle.next);
+        middle.next = null;
+        head = deleteTail(head, middle);
+        node.left = buildTree(head);
+        return node;
+    }
+    
+     private ListNode findMiddle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+    
+    private ListNode deleteTail(ListNode head, ListNode target) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+        ListNode pointer = head;
+        while (pointer.next != target) {
+            pointer = pointer.next;
+        }
+        pointer.next = null;
+        return head;
+    }
+}
