@@ -1,0 +1,35 @@
+Link: https://leetcode.com/problems/valid-palindrome-ii/description/
+class Solution {
+    public boolean validPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return true;
+        }
+        int p1 = 0;
+        int p2 = s.length() - 1;
+        while (p1 < p2) {
+            if (s.charAt(p1) != s.charAt(p2)) {
+                break;
+            } else {
+                p1++;
+                p2--;
+            }
+        }
+        if (p1 >= p2) {
+            return true;
+        }
+        return isSubvalidPalindrome(s, p1 + 1, p2) || isSubvalidPalindrome(s, p1, p2 - 1);
+    }
+    private boolean isSubvalidPalindrome(String s, int left, int right) {
+        int p1 = left;
+        int p2 = right;
+        while (p1 < p2) {
+            if (s.charAt(p1) != s.charAt(p2)) {
+                break;
+            } else {
+                p1++;
+                p2--;
+            }
+        }
+        return p1 >= p2;
+    }
+}
