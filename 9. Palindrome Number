@@ -1,0 +1,15 @@
+Link: https://leetcode.com/problems/palindrome-number/description/
+class Solution {
+    public boolean isPalindrome(int x) {
+        int reverse=0;
+        int tail=0;
+        int num=x;
+        while(x!=0){
+            tail=x%10;
+            x=(x-tail)/10;
+            reverse=reverse*10+tail;
+        }
+        if(num==reverse&&num>=0){return true;}
+        else {return false;}
+    }
+}
