@@ -1,0 +1,31 @@
+Link: https://leetcode.com/problems/roman-to-integer/description/
+class Solution {
+    public int romanToInt(String s) {
+        int count=0;
+        int[] num= new int[s.length()];
+        for(int i=0;i<s.length();i++){
+            if (s.charAt(i)=='M'){num[i]=1000;}
+            else if (s.charAt(i)=='D'){num[i]=500;}
+            else if (s.charAt(i)=='C'){num[i]=100;}
+            else if (s.charAt(i)=='L'){num[i]=50;}
+            else if (s.charAt(i)=='X'){num[i]=10;}
+            else if (s.charAt(i)=='V'){num[i]=5;}
+            else if (s.charAt(i)=='I'){num[i]=1;}
+        }
+        if (s.length()>1){
+            count=num[s.length()-1];
+            for(int i=0;i<s.length()-1;i++){
+               if (num[i]>=num[i+1]){
+                   count=count+num[i];
+               }
+               else if(num[i]<num[i+1]){
+                   count=count-num[i];
+               }
+            }
+        }
+        else if (s.length()==1){
+            count=num[0];
+            }
+        return count;
+    }
+}
