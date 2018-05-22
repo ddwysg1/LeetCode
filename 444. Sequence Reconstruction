@@ -1,0 +1,51 @@
+Link: https://leetcode.com/problems/sequence-reconstruction/description/
+class Solution {
+    public boolean sequenceReconstruction(int[] org, List<List<Integer>> seqs) {
+        Map<Integer, Set<Integer>> map = new HashMap<Integer, Set<Integer>>();
+        Map<Integer, Integer> indegree = new HashMap<Integer, Integer>();
+        for(int num : org) {
+            map.put(num, new HashSet<Integer>());
+            indegree.put(num, 0);
+        }
+        int n = org.length;
+        int count = 0;
+        for (List<Integer> seq : seqs) {
+            count += seq.size();
+            if (seq.size()>=1 && (seq.get(0) > n || seq.get(0) < 1)) {
+                return false;
+            }
+            for (int i = 1; i < seq.size(); i++) {
+                if (seq.get(i) > n || seq.get(i) < 1) {
+                    return false;
+                } 
+                if (map.get(seq.get(i-1)).add(seq.get(i))){
+                    indegree.put(seq.get(i), indegree.get(seq.get(i)) + 1);
+                }
+            }
+        }
+        if (count < n) {
+            return false;
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for (int key : indegree.keySet()) {
+            if (indegree.get(key) == 0) {
+                queue.add(key);
+            }
+        }
+        int cnt = 0;
+        while (queue.size() == 1) {
+            int num = queue.poll();
+            for (int neighbor : map.get(num)) {
+                indegree.put(neighbor, indegree.get(neighbor) - 1);
+                if (indegree.get(neighbor) == 0) {
+                    queue.add(neighbor);
+                }
+            }
+            if (num != org[cnt]) {
+                return false;
+            }
+            cnt++;
+        }
+        return cnt == org.length;
+    }
+}
