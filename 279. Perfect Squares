@@ -1,0 +1,52 @@
+Link: https://leetcode.com/problems/perfect-squares/description/
+Version 1 (not good)
+class Solution {
+    public int numSquares(int n) {
+        if (n < 4) {
+            return n;
+        }
+        int root = (int) Math.sqrt(n);
+        if (n == root * root) {
+            return 1;
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = root; i > 0; i--) {
+            int count = 0;
+            count += n / (i * i);
+            int remain = n % (i * i);
+            if (remain > 0) {
+                count += numSquares(remain);
+            }
+            min = Math.min(min, count);
+        }
+        return min;
+    }
+}
+
+Version 2 (BFS)
+class Solution {
+    public int numSquares(int n) {
+        if (n <= 0) {
+            return 0;
+        }      
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(n);
+        int length = 0;
+        while (!queue.isEmpty()) {
+            length++;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int temp = queue.poll();
+                int root = (int) Math.sqrt(temp);
+                for (int j = root; j > 0; j--) {
+                    int remain = temp - j * j;
+                    if (remain == 0) {
+                        return length;
+                    }
+                    queue.offer(remain);
+                }
+            }
+        }
+        return length;
+    }
+}
