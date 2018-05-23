@@ -1,4 +1,5 @@
 Link: https://leetcode.com/problems/surrounded-regions/description/
+Version 1 (32ms)
 class Solution {
     private int m,n;
     
@@ -82,5 +83,97 @@ class Solution {
     
     private int getNode(int i, int j) {
         return i * n + j;
+    }
+}
+Version 2 (21ms)
+class Solution {
+
+    public void solve(char[][] board) {
+        if(board == null || board.length == 0 || board[0].length == 0) return;
+        
+        int n = board.length;
+        int m = board[0].length;
+        //initialize
+        int[] roots = new int[m * n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == 'X') {
+                    roots[i * m + j] = -1;
+                } else {
+                    roots[i * m + j] = i * m + j;
+                }
+            }
+        }
+        // set direction
+        int[] directionX = {0, 1, -1, 0};
+        int[] directionY = {1, 0, 0, -1};
+        
+        // union
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == 'X') {
+                    continue;
+                } else {
+                    int root1 = i * m + j;
+                    for (int k = 0; k < 4; k++) {
+                        int neighborX = i + directionX[k];
+                        int neighborY = j + directionY[k];
+                        if (!outBoard(board, neighborX, neighborY)) {
+                            if (board[neighborX][neighborY] == 'O') {
+                                int root2 = neighborX * m + neighborY;
+                                int parent1 = findRoot(roots, root1);
+                                int parent2 = findRoot(roots, root2);
+                                if (parent1 != parent2) {
+                                    if (onBorder(board, parent1 / m, parent1 % m)) {
+                                        roots[parent2] = root1;
+                                    } else {
+                                        roots[parent1] = root2;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // set "X"
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == 'X') {
+                    continue;
+                } else {
+                    int parent = findRoot(roots, i * m + j);
+                    int x = parent / m;
+                    int y = parent % m;
+                    if (!onBorder(board, x, y)) {
+                        board[i][j] = 'X';
+                    }
+                }
+            }
+        }
+    }
+    
+    private int findRoot(int[] roots, int id) {
+        while(roots[id] != id) {
+            roots[id] = roots[roots[id]];
+            id = roots[id];
+        }
+        return id;
+    }
+    
+    private boolean outBoard(char[][] board, int x, int y) {
+        int n = board.length;
+        int m = board[0].length;
+        return (x < 0 || x >= n || y < 0 || y >= m);
+    }
+    
+    private boolean onBorder(char[][] board, int x, int y) {
+        int n = board.length;
+        int m = board[0].length;
+        if (x == 0 || x == n - 1 || y == 0 || y == m - 1) {
+            return true;
+        }
+        return false;
     }
 }
