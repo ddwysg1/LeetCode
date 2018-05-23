@@ -1,0 +1,35 @@
+Link: https://leetcode.com/problems/redundant-connection/description/
+class Solution {
+    public int[] findRedundantConnection(int[][] edges) {
+        int[] result = new int[2];
+        if (edges == null || edges.length == 0 || edges[0].length == 0) {
+            return result;
+        }
+        
+        int[] roots = new int[edges.length];
+        for (int i = 0; i < edges.length; i++) {
+            roots[i] = i;
+        }
+        
+        for (int[] edge : edges) {
+            int p = findRoot(roots, edge[0] - 1);
+            int q = findRoot(roots, edge[1] - 1);
+            if (p != q) {
+                roots[p] = q;
+            }
+            if (p == q) {
+                result[0] = edge[0];
+                result[1] = edge[1];
+            }
+        }
+        return result;
+    }
+    
+    private int findRoot(int[] roots, int id) {
+        while(roots[id] != id) {
+            roots[id] = roots[roots[id]];
+            id = roots[id];
+        }
+        return id;
+    }
+}
