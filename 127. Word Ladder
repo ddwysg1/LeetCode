@@ -1,0 +1,59 @@
+Link: https://leetcode.com/problems/word-ladder/description/
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        HashSet<String> dict = new HashSet<String>();
+        for (String word : wordList) {
+            dict.add(word);
+        }
+        if (beginWord.equals(endWord)) {
+            return 1;
+        }
+        HashSet<String> set = new HashSet<String>();
+        Queue<String> queue = new LinkedList<>();
+        set.add(beginWord);
+        queue.offer(beginWord);
+        int length = 1;
+        //BFS
+        while(!queue.isEmpty()) {
+            length++;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String curt = queue.poll();
+                for (String word : nextWord(curt, dict)) {
+                    if (set.contains(word)) {
+                        continue;
+                    }
+                    if (word.equals(endWord)) {
+                        return length;
+                    }
+                    set.add(word);
+                    queue.offer(word);
+                }
+            }
+        }
+        return 0;
+    }
+    
+    private String replace(String word, int index, char c) {
+        char[] ch = word.toCharArray();
+        ch[index] = c;
+        return new String(ch);
+    }
+    
+    private List<String> nextWord(String word, HashSet<String> dict) {
+        List<String> nextWords = new ArrayList<>();
+        for (char c = 'a'; c < 'z'; c++){
+            for (int i = 0; i < word.length(); i++) {
+                if (c == word.charAt(i)) {
+                    continue;
+                }
+                String nextWord = replace(word, i, c);
+                if (dict.contains(nextWord)){
+                    nextWords.add(nextWord);
+                }
+            }
+        }
+        return nextWords;
+    }
+    
+}
