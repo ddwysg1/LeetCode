@@ -11,6 +11,7 @@ class Employee {
     public List<Integer> subordinates;
 };
 */
+Version 1 (32ms)
 class Solution {
     public int getImportance(List<Employee> employees, int id) {
         if (employees == null || id == 0) {
@@ -39,5 +40,35 @@ class Solution {
                 break;
             }
         }
+    }
+}
+
+Version 2 (15ms)
+//HashMap has been used to help improve the performance
+class Solution {
+    public int getImportance(List<Employee> employees, int id) {
+        if (employees == null || id == 0) {
+            return 0;
+        }
+        //store data in HashMap
+        Map<Integer, Employee> map = new HashMap<Integer, Employee>();
+        for (Employee emp : employees) {
+            map.put(emp.id, emp);
+        }
+        //BFS
+        int value = 0;
+        Queue<Employee> queue = new LinkedList<>();
+        queue.offer(map.get(id));
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Employee curt = queue.poll();
+                value += curt.importance;
+                for (int num : curt.subordinates) {
+                    queue.offer(map.get(num));
+                }
+            }
+        }
+        return value;
     }
 }
