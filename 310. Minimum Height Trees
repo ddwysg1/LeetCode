@@ -1,0 +1,60 @@
+link: https://leetcode.com/problems/minimum-height-trees/description/
+class Solution {
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        List<Integer> result = new ArrayList<Integer>();
+        if (n == 0) {
+            return result;
+        }
+        if (n == 1 || edges == null || edges.length == 0 || edges[0].length == 0) {
+            result.add(0);
+            return result;
+        }
+        //build map
+        Map<Integer, Set<Integer>> map = new HashMap<Integer, Set<Integer>>();
+        Map<Integer, Integer> degree = new HashMap<Integer, Integer>();
+        for (int i = 0; i < n; i++) {
+            map.put(i, new HashSet<Integer>());
+            degree.put(i, 0);
+        }
+        for (int[] edge : edges) {
+            int i = edge[0];
+            int j = edge[1];
+            map.get(i).add(j);
+            map.get(j).add(i);
+            degree.put(i, degree.get(i) + 1);
+            degree.put(j, degree.get(j) + 1);
+        }
+        //BFS
+        Queue<Integer> queue = new LinkedList<Integer>(); 
+        HashSet<Integer> visited = new HashSet<Integer>();
+        for (int i = 0; i < n; i++) {
+            if (degree.get(i) == 1) {
+                queue.offer(i);
+                visited.add(i);
+            }
+        }
+        int remain = n;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            remain -= size;
+            for (int i = 0; i < size; i++) {
+                int curt = queue.poll();
+                if (remain == 0) {
+                    result.add(curt);
+                }
+                degree.put(curt, 0);
+                for (int neighbor : map.get(curt)) {
+                    if (visited.contains(neighbor)) {
+                        continue;
+                    }
+                    degree.put(neighbor, degree.get(neighbor) - 1);
+                    if (degree.get(neighbor) == 1) {
+                        queue.offer(neighbor);
+                        visited.add(neighbor);
+                    }
+                }
+            }
+        }
+        return result;
+    }    
+}
