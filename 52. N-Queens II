@@ -16,6 +16,7 @@ class Solution {
                         int n) {
         if (cols.size() == n) {
             result.add(new ArrayList<>(cols));
+            return;
         }
         
         for (int colIndex = 0; colIndex < n; colIndex++) {
