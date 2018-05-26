@@ -1,0 +1,46 @@
+Link: https://leetcode.com/problems/n-queens-ii/description/
+class Solution {
+    public int totalNQueens(int n) {
+        
+        if (n <= 0) {
+            return 0;
+        }
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> cols = new ArrayList<>();
+        search(result, cols, n);
+        return result.size();
+    }
+    
+    private void search(List<List<Integer>> result,
+                        List<Integer> cols,
+                        int n) {
+        if (cols.size() == n) {
+            result.add(new ArrayList<>(cols));
+        }
+        
+        for (int colIndex = 0; colIndex < n; colIndex++) {
+            if (!isValid(cols, colIndex)) {
+                continue;
+            }
+            cols.add(colIndex);
+            search(result, cols, n);
+            cols.remove(cols.size() - 1);
+        }
+    }
+    
+    private boolean isValid(List<Integer> cols, int column) {
+        int row = cols.size();
+        for (int rowIndex = 0; rowIndex < cols.size(); rowIndex++) {
+            if (cols.get(rowIndex) == column) {
+                return false;
+            }
+            if (rowIndex + cols.get(rowIndex) == row + column) {
+                return false;
+            }
+            if (rowIndex - cols.get(rowIndex) == row - column) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
