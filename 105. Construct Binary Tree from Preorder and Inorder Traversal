@@ -1,0 +1,38 @@
+Link: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder.length != inorder.length) {
+            return null;   
+        }
+        return construct(inorder, 0, inorder.length - 1, preorder, 0, preorder.length - 1);
+    }
+    
+    private TreeNode construct(int[] inorder, int instart, int inend, int[] preorder, int prestart, int preend) {
+        if (instart > inend) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[prestart]);
+        int position = getPosition(inorder, instart, inend, preorder[prestart]);
+        root.left = construct(inorder, instart, position - 1, preorder, prestart + 1, prestart + position - instart);
+        root.right = construct(inorder, position + 1, inend, preorder, preend + position - inend + 1, preend);
+        return root;
+    }
+    
+    private int getPosition(int[] arr, int start, int end, int key) {
+        for (int i = start; i <= end; i++) {
+            if (arr[i] == key) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
