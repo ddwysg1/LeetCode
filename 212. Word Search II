@@ -1,0 +1,66 @@
+Link: https://leetcode.com/problems/word-search-ii/description/
+class Solution {
+    int[] directX = {1, -1, 0, 0};
+    int[] directY = {0, 0, 1, -1};
+    
+    public List<String> findWords(char[][] board, String[] words) {
+        if (board == null || board.length == 0) {
+            return new ArrayList<>();
+        }
+        if (board[0] == null || board[0].length == 0) {
+            return new ArrayList<>();
+        }
+        
+        Map<String, Boolean> map = getPrefix(words);
+        boolean[][] visited = new boolean[board.length][board[0].length];
+        Set<String> wordset = new HashSet<>();
+        
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                visited[i][j] = true;
+                dfs(board, i, j, String.valueOf(board[i][j]), visited, wordset, map);
+                visited[i][j] = false;
+            }
+        }
+        return new ArrayList<String>(wordset);
+    }
+    
+    private void dfs(char[][]board, 
+                     int i, 
+                     int j, 
+                     String word, 
+                     boolean[][] visited, 
+                     Set<String> wordset, 
+                     Map<String, Boolean> map) {
+        if (!map.containsKey(word)) {
+            return;
+        }
+        if (map.get(word)) {
+            wordset.add(word);
+        }
+        for (int m = 0; m < 4; m++) {
+            int adjX = i + directX[m];
+            int adjY = j + directY[m];
+            if (adjX < 0 || adjX >= board.length || adjY < 0 || adjY >= board[0].length || visited[adjX][adjY]) {
+                continue;
+            }
+            visited[adjX][adjY] = true;
+            dfs(board, adjX, adjY, word + String.valueOf(board[adjX][adjY]), visited, wordset, map);
+            visited[adjX][adjY] = false;
+        }
+    }
+    
+    private Map<String, Boolean> getPrefix(String[] words) {
+        Map<String, Boolean> map = new HashMap<>();
+        for (String word : words) {
+            for (int i = 0; i < word.length() - 1; i++) {
+                String sub = word.substring(0, i + 1);
+                if (!map.containsKey(sub)) {
+                    map.put(sub, false);
+                }
+            }
+            map.put(word, true);
+        }
+        return map;
+    }
+}
