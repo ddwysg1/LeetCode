@@ -1,0 +1,53 @@
+Link: https://leetcode.com/problems/valid-sudoku/description/
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        if (board == null || board.length != 9 || board[0].length != 9) {
+            return false;
+        }
+        HashSet<Character> set = new HashSet<Character>();
+        //check the rows
+        for (int i = 0; i < 9; i++) {
+            set.clear();
+            for (int j = 0; j < 9; j++) {
+                if (!isValid(board[i][j], set)) {
+                    return false;
+                }
+            }
+        }
+        //check the cols
+        for (int i = 0; i < 9; i++) {
+            set.clear();
+            for (int j = 0; j < 9; j++) {
+                if (!isValid(board[j][i], set)) {
+                    return false;
+                }
+            }
+        }
+        //check the cells
+        for (int i = 0; i < 9; i += 3) {
+            for (int j = 0; j < 9; j += 3) {
+                set.clear();
+                for (int k = 0; k < 9; k++) {
+                    if (!isValid(board[i + k / 3][j + k % 3], set)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+    private boolean isValid(Character c, HashSet<Character> set) {
+        if (c == '.') {
+            return true;
+        }
+        if (c < '0' || c > '9') {
+            return false;
+        }
+        if (set.contains(c)) {
+            return false;
+        }
+        set.add(c);
+        return true;
+    }
+}
