@@ -1,0 +1,42 @@
+Link: https://leetcode.com/problems/additive-number/description/
+class Solution {
+    public boolean isAdditiveNumber(String num) {
+        if (num == null || num.length() < 3) {
+            return false;
+        }
+        int length = num.length();
+        // find the 1st and 2nd number
+        //find the 1st
+        for (int i = 1; i <= (length - 1) / 2; i++) {
+            if (num.startsWith("0") && i > 1) {
+                break;
+            }
+            //find the 2nd
+            for (int j = i + 1; (length - j) >= i && (length - j) >= (j - i); j++) {
+                if (num.charAt(i) == '0' && j - i > 1) {
+                    break;
+                }
+                
+                long num1 = Long.parseLong(num.substring(0, i));
+                long num2 = Long.parseLong(num.substring(i, j));
+                
+                if (isAddtive(num.substring(j), num1, num2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean isAddtive(String s, long num1, long num2) {
+        if (s.equals("")) {
+            return true;
+        }
+        long sum = num1 + num2;
+        String str = "" + sum;
+        if (!s.startsWith(str)) {
+            return false;
+        }
+        return isAddtive(s.substring(str.length()), num2, sum);
+    }
+}
