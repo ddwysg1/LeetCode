@@ -1,0 +1,34 @@
+Link: https://leetcode.com/problems/house-robber-iii/description/
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class ResultType {
+    public int rob, not_rob;
+    public ResultType() {
+        rob = not_rob = 0;
+    }
+}
+public class Solution {
+    public int rob(TreeNode root) {
+        ResultType result = visit(root);
+        return Math.max(result.rob, result.not_rob);
+    }
+    
+    public ResultType visit(TreeNode root) {
+        ResultType result = new ResultType();
+        if (root == null) {
+            return result;
+        }
+        ResultType left = visit(root.left);
+        ResultType right = visit(root.right);
+        result.rob = root.val + left.not_rob + right.not_rob;
+        result.not_rob = Math.max(left.rob, left.not_rob) + Math.max(right.rob, right.not_rob);
+        return result;
+    }
+}
