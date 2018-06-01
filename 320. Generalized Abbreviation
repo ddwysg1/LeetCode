@@ -1,4 +1,5 @@
 Link: https://leetcode.com/problems/generalized-abbreviation/description/
+Version 1: too slow(only beats 8%)
 class Solution {
     public List<String> generateAbbreviations(String word) {
         List<String> result = new ArrayList<>();
@@ -8,14 +9,14 @@ class Solution {
         }
         StringBuilder sb = new StringBuilder(word);
         dfs(result, sb, 0);
-        result = transform(result);
         return result;
     }
     
     private void dfs(List<String> result,
                      StringBuilder sb,
                      int startIndex) {
-        result.add(sb.toString());
+        StringBuilder ans = transform(sb.toString());
+        result.add(ans.toString());
         for (int i = startIndex; i < sb.length(); i++) {
             char ch = sb.toString().charAt(i);
             sb.replace(i, i + 1, "1");
@@ -24,29 +25,25 @@ class Solution {
         }
     }
     
-    private List<String> transform(List<String> result) {
-        List<String> transformed = new ArrayList<>();
-        for(String s : result) {
-            StringBuilder sb = new StringBuilder();
-            int count = 0;
-            for (int i = 0; i < s.length(); i++) {
-                if (Character.isLetter(s.charAt(i))){
-                    if (count == 0) {
-                        sb.append(s.charAt(i));
-                    } else {
-                        sb.append(count);
-                        count = 0;
-                        sb.append(s.charAt(i));
-                    }
-                } else if (!Character.isLetter(s.charAt(i)) && i == s.length() - 1){
-                    count++;
-                    sb.append(count);
+    private StringBuilder transform(String s) {
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (Character.isLetter(s.charAt(i))){
+                if (count == 0) {
+                    sb.append(s.charAt(i));
                 } else {
-                    count++;
+                    sb.append(count);
+                    count = 0;
+                    sb.append(s.charAt(i));
                 }
+            } else if (!Character.isLetter(s.charAt(i)) && i == s.length() - 1){
+                count++;
+                sb.append(count);
+            } else {
+                count++;
             }
-            transformed.add(sb.toString());
         }
-        return transformed;
+        return sb;
     }
 }
