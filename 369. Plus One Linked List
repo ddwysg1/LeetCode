@@ -1,0 +1,41 @@
+Link: https://leetcode.com/problems/plus-one-linked-list/description/
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode plusOne(ListNode head) {
+        Stack<Integer> s1 = new Stack<Integer>();
+        //store value
+        while (head != null) {
+            s1.push(head.val);
+            head = head.next;
+        }
+        //add 
+        Stack<Integer> s2 = new Stack<Integer>();
+        int start = s1.pop() + 1;
+        s2.push(start % 10);
+        int remain = start / 10;
+        while(!s1.empty()) {
+            int sum = remain;
+            sum += s1.pop();
+            s2.push(sum % 10);
+            remain = sum / 10;
+        }
+        if (remain != 0) {
+            s2.push(remain);
+        }
+        //build ListNode
+        ListNode dummy = new ListNode(0);
+        ListNode curt = dummy;
+        while(!s2.empty()) {
+            curt.next = new ListNode(s2.pop());
+            curt = curt.next;
+        }
+        return dummy.next;
+    }
+}
