@@ -1,0 +1,52 @@
+Link: https://leetcode.com/problems/remove-invalid-parentheses/description/
+class Solution {
+    public List<String> removeInvalidParentheses(String s) {
+        List<String> results = new ArrayList<>();
+        int[] result = getNumber(s);
+        dfs(s, 0, result[0], result[1],results);
+        return results;
+    }
+    
+    private void dfs(String s,
+                     int startIndex,
+                     int left,
+                     int right,
+                     List<String> results) {
+        if (left == 0 && right == 0 && isValid(s)) {
+            results.add(s);
+            return;
+        }
+        for (int i = startIndex; i < s.length(); i++) {
+            if (i > startIndex && s.charAt(i) == s.charAt(i - 1)) {
+                continue;
+            }
+            if (left > 0 && s.charAt(i) == '(') {
+                dfs(s.substring(0, i) + s.substring(i + 1), i, left - 1, right, results);
+            }
+            if (right > 0 && s.charAt(i) == ')') {
+                dfs(s.substring(0, i) + s.substring(i + 1), i, left, right - 1, results);
+            }
+        }
+    }
+    
+    private int[] getNumber(String s) {
+        int[] result = new int[2];
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                result[0]++;
+            } else if (s.charAt(i) == ')') {
+                if (result[0] > 0) {
+                    result[0]--;
+                } else {
+                    result[1]++;
+                }
+            }
+        }
+        return result;
+    }
+    
+    private boolean isValid(String s) {
+        int[] result = getNumber(s);
+        return result[0] == 0 && result[1] == 0;
+    }
+}
