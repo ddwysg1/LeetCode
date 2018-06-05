@@ -1,0 +1,43 @@
+Link: https://leetcode.com/problems/reverse-string-ii/description/
+class Solution {
+    public String reverseStr(String s, int k) {
+        int length = s.length();
+        char[] ch = s.toCharArray();
+        int head = 0;
+        while(head + 2*k < length) {
+            int left = head;
+            int right = head + k - 1;
+            while(left < right) {
+                char temp = ch[left];
+                ch[left] = ch[right];
+                ch[right] = temp;
+                left++;
+                right--;
+            }
+            head = head + 2*k;
+        }
+        if (length - head >= k) {
+            int left = head;
+            int right = head + k - 1;
+            while(left < right) {
+                char temp = ch[left];
+                ch[left] = ch[right];
+                ch[right] = temp;
+                left++;
+                right--;
+            }
+        }
+        if (length - head < k) {
+            int left = head;
+            int right = length - 1;
+            while(left < right) {
+                char temp = ch[left];
+                ch[left] = ch[right];
+                ch[right] = temp;
+                left++;
+                right--;
+            }
+        }
+       return new String(ch);
+    }
+}
