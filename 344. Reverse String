@@ -1,0 +1,16 @@
+Link: https://leetcode.com/problems/reverse-string/description/
+class Solution {
+    public String reverseString(String s) {
+        int head = 0;
+        int tail = s.length() - 1;
+        StringBuilder sb = new StringBuilder(s);
+        while(head < tail) {
+            String temp = s.substring(head, head + 1);
+            sb.replace(head, head + 1, s.substring(tail, tail + 1));
+            sb.replace(tail, tail + 1, temp);
+            head++;
+            tail--;
+        }
+        return sb.toString();
+    }
+}
