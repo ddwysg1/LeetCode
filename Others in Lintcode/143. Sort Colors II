@@ -1,0 +1,53 @@
+Link: https://www.lintcode.com/problem/sort-colors-ii/description
+public class Solution {
+    /**
+     * @param colors: A list of integer
+     * @param k: An integer
+     * @return: nothing
+     */
+    public void sortColors2(int[] colors, int k) {
+        // write your code here
+        if (colors == null || colors.length == 0) {
+            return;
+        }
+        sortColor(colors, 0, colors.length - 1, 1, k);
+    }
+    
+    private void sortColor(int[] colors,
+                           int left,
+                           int right,
+                           int from,
+                           int to) {
+            if (from == to) {
+                return;
+            }
+            if (left >= right) {
+                return;
+            }
+            
+            int l = left, r = right;
+            int mid = from + (to - from) / 2;
+            while (l < r) {
+                while (l < r && colors[l] <= mid) {
+                    l++;
+                }
+                while (l < r && colors[r] > mid) {
+                    r--;
+                }
+                if (l < r){
+                    swap(colors, l, r);
+                    l++;
+                    r--;
+                }
+            }
+            sortColor(colors, left, r, from, mid);
+            sortColor(colors, l, right, mid + 1, to);
+            
+        }
+    
+    private void swap(int[] nums, int pos1, int pos2) {
+        int temp = nums[pos1];
+        nums[pos1] = nums[pos2];
+        nums[pos2] = temp;
+    }
+}
