@@ -1,0 +1,26 @@
+Link: https://leetcode.com/problems/3sum-smaller/description/
+class Solution {
+    int count = 0;
+    public int threeSumSmaller(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return count;
+        }
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            int subTarget = target - nums[i];
+            twoSumSmaller(nums, i + 1, nums.length - 1, subTarget);    
+        }
+        return count;
+    }
+    
+    private void twoSumSmaller(int[] nums, int left, int right, int target) {
+        while (left < right) {
+            if (nums[left] + nums[right] < target) {
+                count += right - left;
+                left++;
+            } else {
+                right--;
+            }
+        }
+    }
+}
