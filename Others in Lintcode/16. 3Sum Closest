@@ -1,7 +1,7 @@
 Link: https://leetcode.com/problems/3sum-closest/description/
 class Solution {
     int shortestDistance = Integer.MAX_VALUE;
-    int sum;
+    int sum = 0;
     public int threeSumClosest(int[] A, int target) {
         Arrays.sort(A);
         for(int i = 0; i < A.length - 2; i++){
