@@ -1,0 +1,99 @@
+Link: https://leetcode.com/problems/sort-transformed-array/description/
+public class Solution {
+    public int[] sortTransformedArray(int[] nums, int a, int b, int c) {
+        int length = nums.length;
+        int[] res = new int[length];
+        if (a == 0 && b == 0) {
+            for (int i = 0; i < length; i++) {
+                res[i] = c;
+            }
+            return res;
+        }
+        if (a == 0) {
+            if (b > 0) {
+                for (int i = 0; i < length; i++) {
+                    res[i] = b * nums[i] + c;
+                }
+            } else {
+                for (int i = 0; i < length; i++) {
+                    res[i] = b * nums[length - i - 1] + c;
+                }
+            }
+            return res;
+        }
+        float sym = (float) -b / (2 * a);
+        Number number = find(nums, sym);
+        int num = number.num;
+        int index = number.index;
+        int i = index - 1;
+        int j = index + 1;
+        if (a > 0) {
+            int k = 1;
+            res[0] = a * num * num + b * num + c;
+            while (i >= 0 || j < length) {
+                if (i >= 0 && j < length) {
+                    if (Math.abs(sym - nums[i]) > Math.abs(sym - nums[j])) {
+                        res[k++] = a * nums[j] * nums[j] + b * nums[j] + c;
+                        j++;
+                    } else {
+                        res[k++] = a * nums[i] * nums[i] + b * nums[i] + c;
+                        i--;
+                    }
+                } else if (i >= 0) {
+                    res[k++] = a * nums[i] * nums[i] + b * nums[i] + c;
+                    i--;
+                } else if (j < length) {
+                    res[k++] = a * nums[j] * nums[j] + b * nums[j] + c;
+                    j++;
+                }
+            }
+        } else {
+            int k = length - 2;
+            res[length - 1] = a * num * num + b * num + c;
+            while (i >= 0 || j < length) {
+                if (i >= 0 && j < length) {
+                    if (Math.abs(sym - nums[i]) > Math.abs(sym - nums[j])) {
+                        res[k--] = a * nums[j] * nums[j] + b * nums[j] + c;
+                        j++;
+                    } else {
+                        res[k--] = a * nums[i] * nums[i] + b * nums[i] + c;
+                        i--;
+                    }
+                } else if (i >= 0) {
+                    res[k--] = a * nums[i] * nums[i] + b * nums[i] + c;
+                    i--;
+                } else if (j < length) {
+                    res[k--] = a * nums[j] * nums[j] + b * nums[j] + c;
+                    j++;
+                }
+            }
+        }
+        return res;
+    }
+    
+    private Number find(int[] nums, float sym) {
+        float dis = Integer.MAX_VALUE;
+        int num = nums[0];
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (Math.abs(sym - nums[i]) < dis) {
+                dis = Math.abs(sym - nums[i]);
+                num = nums[i];
+                index = i;
+            }
+        }
+        return new Number(num, index);
+        
+    }
+    
+    
+}
+
+class Number {
+    int num;
+    int index;
+    public Number(int num, int index) {
+        this.num = num;
+        this.index = index;
+    }
+}
