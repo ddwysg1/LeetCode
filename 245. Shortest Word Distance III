@@ -1,0 +1,32 @@
+Link: https://leetcode.com/problems/shortest-word-distance-iii/description/
+class Solution {
+    public int shortestWordDistance(String[] words, String word1, String word2) {
+        if (words == null || words.length == 0) {
+            return 0;
+        }
+        int dis = Integer.MAX_VALUE;
+        int pos1 = -1;
+        int pos2 = -1;
+        for (int i = 0; i < words.length; i++) {
+            if (word1.equals(word2)) {
+                if (words[i].equals(word1)) {
+                    pos2 = i;
+                    if(pos1 != -1) {
+                        dis = Math.min(dis, pos2 - pos1);
+                    }
+                    pos1 = pos2;
+                }
+            } else {
+                if (words[i].equals(word1)) {
+                    pos1 = i;
+                } else if (words[i].equals(word2)) {
+                    pos2 = i;
+                }
+                if (pos1 != -1 && pos2 != -1) {
+                    dis = Math.min(dis, Math.abs(pos2 - pos1));
+                }
+            }
+        }
+        return dis;
+    }
+}
