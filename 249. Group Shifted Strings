@@ -1,0 +1,40 @@
+Link: https://leetcode.com/problems/group-shifted-strings/description/
+class Solution {
+    public List<List<String>> groupStrings(String[] strings) {
+        List<List<String>> result = new ArrayList<>();
+        if (strings == null || strings.length == 0) {
+            return result;
+        }
+        Map<String, List<String>> map = new HashMap<>();
+        for (int i = 0; i < strings.length; i++) {
+            String s = transform(strings[i]);
+            if (!map.containsKey(s)) {
+                List<String> list = new ArrayList<>();
+                list.add(strings[i]);
+                map.put(s, list);
+            } else {
+                map.get(s).add(strings[i]);
+            }
+        }
+        for (String s : map.keySet()) {
+            List<String> list = map.get(s);
+            result.add(list);
+        }
+        return result;
+    }
+    
+    private String transform(String s) {
+        StringBuilder sb = new StringBuilder();
+        char[] chars = s.toCharArray();
+        int dis = chars[0] - 'a';
+        for (int i = 0; i < chars.length; i++) {
+            int len = chars[i] - 'a' - dis;
+            if (len < 0) {
+                len += 26;
+            }
+            char c =  (char) (97 + len);
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+}
