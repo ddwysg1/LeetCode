@@ -1,0 +1,34 @@
+Link: https://leetcode.com/problems/number-of-longest-increasing-subsequence/description/
+class Solution {
+    public int findNumberOfLIS(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int n = nums.length;
+        int[] DP = new int[n];
+        int[] path = new int[n];
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            DP[i] = 1;
+            path[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    if (DP[i] < DP[j] + 1) {
+                        DP[i] = DP[j] + 1;
+                        path[i] = path[j];
+                    } else if (DP[i] == DP[j] + 1) {
+                        path[i] += path[j];
+                    }
+                }
+            }
+            max = Math.max(max, DP[i]);
+        }
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (DP[i] == max) {
+                count += path[i];
+            }
+        }
+        return count;
+    }
+}
