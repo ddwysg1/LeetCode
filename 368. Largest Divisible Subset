@@ -1,0 +1,32 @@
+Link: https://leetcode.com/problems/largest-divisible-subset/description/
+class Solution {
+    public List<Integer> largestDivisibleSubset(int[] nums) {
+        List<Integer> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+        int n = nums.length;
+        Arrays.sort(nums);
+        List<List<Integer>> DP = new ArrayList<>();
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            DP.add(new ArrayList<>());
+            DP.get(i).add(nums[i]);
+            for (int j = 0; j < i; j++) {
+                if(nums[i] % nums[j] == 0) {
+                    if (DP.get(i).size() <= DP.get(j).size() + 1) {
+                        List<Integer> temp = new ArrayList<>(DP.get(j));
+                        DP.remove(i);
+                        DP.add(new ArrayList<>(temp));
+                        DP.get(i).add(nums[i]);
+                    }
+                }
+            }
+            if (max <= DP.get(i).size()) {
+                max = DP.get(i).size();
+                result = new ArrayList<>(DP.get(i));
+            }
+        }
+        return result;
+    }
+}
