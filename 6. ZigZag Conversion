@@ -1,0 +1,46 @@
+Link: https://leetcode.com/problems/zigzag-conversion/description/
+class Solution {
+    public String convert(String s, int numRows) {
+        if (s == null || s.length() == 0 || numRows <= 0) {
+            return "";
+        }
+        if (numRows == 1 || s.length() <= numRows) {
+            return s;
+        }
+        List<List<Character>> cache = new ArrayList<>();
+        boolean topToBottom = true;
+        for (int i = 0; i < numRows; i++) {
+            cache.add(new ArrayList<>());
+        }
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (topToBottom == true) {
+                if (count % numRows == numRows - 1) {
+                    topToBottom = !topToBottom;
+                    cache.get(count % numRows).add(s.charAt(i));
+                    count--;
+                } else {
+                    cache.get(count % numRows).add(s.charAt(i));
+                    count++;
+                }
+            } else {
+                if (count % numRows == 0) {
+                    topToBottom = !topToBottom;
+                    cache.get(count % numRows).add(s.charAt(i));
+                    count++;
+                } else {
+                    cache.get(count % numRows).add(s.charAt(i));
+                    count--;
+                }          
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < cache.size(); i++) {
+            List<Character> list = cache.get(i);
+            for (int j = 0; j < list.size(); j++) {
+                sb.append(list.get(j));
+            }
+        }
+        return sb.toString();
+    }
+}
