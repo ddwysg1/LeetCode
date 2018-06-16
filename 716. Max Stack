@@ -1,0 +1,61 @@
+Link: https://leetcode.com/problems/max-stack/description/
+class MaxStack {
+    Stack<Integer> stack;
+    Stack<Integer> maxValue; 
+    /** initialize your data structure here. */
+    public MaxStack() {
+        stack = new Stack<>();
+        maxValue = new Stack<>();
+    }
+    
+    public void push(int x) {
+        helper(x);
+    }
+    
+    private void helper(int x) {
+        int temp = maxValue.empty() ? Integer.MIN_VALUE : maxValue.peek();
+        if (x >= temp) {
+            temp = x;
+        }
+        stack.push(x);
+        maxValue.push(temp);
+    }
+    
+    public int pop() {
+        maxValue.pop();
+        return stack.pop();
+    }
+    
+    public int top() {
+        return stack.peek();
+    }
+    
+    public int peekMax() {
+        return maxValue.peek();
+    }
+    
+    public int popMax() {
+        int max = maxValue.peek();
+        Stack<Integer> temp = new Stack<>();
+        while (stack.peek() != max) {
+            temp.push(stack.pop());
+            maxValue.pop();
+        }
+        stack.pop();
+        maxValue.pop();
+        while (!temp.empty()) {
+            helper(temp.pop());
+        }
+        return max;
+    }
+}
+
+/**
+ * Your MaxStack object will be instantiated and called as such:
+ * MaxStack obj = new MaxStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.peekMax();
+ * int param_5 = obj.popMax();
+ */
