@@ -1,0 +1,35 @@
+
+Link: https://leetcode.com/problems/range-sum-query-mutable/description/
+class NumArray {
+    int[] sum;
+    int[] nums;
+    public NumArray(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return;
+        }
+        this.nums = nums;
+        int n = nums.length;
+        sum = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            sum[i] = sum[i - 1] + nums[i - 1];
+        }
+    }
+    
+    public void update(int i, int val) {
+        for (int index = i + 1; index < sum.length; index++) {
+            sum[index] = sum[index] - nums[i] + val;
+        }
+        nums[i] = val;
+    }
+    
+    public int sumRange(int i, int j) {
+        return sum[j + 1] - sum[i];
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(i,val);
+ * int param_2 = obj.sumRange(i,j);
+ */
