@@ -1,0 +1,37 @@
+Link: https://www.lintcode.com/problem/copy-books/description
+public class Solution {
+    /**
+     * @param pages: an array of integers
+     * @param k: An integer
+     * @return: an integer
+     */
+    public int copyBooks(int[] pages, int k) {
+        // write your code here
+        int n = pages.length;
+        if (k > n) {
+            k = n;
+        }
+        int[][] f = new int[k + 1][n + 1];
+        f[0][0] = 0;
+        
+        for (int i = 1; i <= n; i++){
+            f[0][i] = Integer.MAX_VALUE;
+        }
+
+        for (int i = 1; i <= k; i++) {
+            for (int j = 0; j <= n; j++) {
+                f[i][j] = Integer.MAX_VALUE;
+                int sum = 0;
+                for (int q = j; q >= 0; q--) {
+                    if (f[i - 1][q] < Integer.MAX_VALUE) {
+                        f[i][j] = Math.min(f[i][j], Math.max(f[i - 1][q], sum));
+                    }
+                    if (q > 0) {
+                        sum += pages[q - 1];
+                    }
+                }
+            }
+        }
+        return f[k][n];
+    }
+}
