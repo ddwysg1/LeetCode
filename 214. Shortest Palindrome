@@ -1,0 +1,36 @@
+Link: https://leetcode.com/problems/shortest-palindrome/description/
+class Solution {
+    public String shortestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        char[] ch = s.toCharArray();
+        int n = ch.length;
+        int m = isPanlindrome(ch, n);
+        StringBuilder sb = new StringBuilder();
+        for (int i = n - 1; i > m; i--) {
+            sb.append(ch[i]);
+        }
+        sb.append(s);
+        return sb.toString();
+    }
+    
+    private int isPanlindrome(char[] ch, int n) {
+        for (int i = n - 1; i >= 0; i--) {
+            int p = 0;
+            int q = i;
+            while(p < q) {
+                if (ch[p] == ch[q]) {
+                    p++;
+                    q--;
+                } else {
+                    break;
+                }
+            }
+            if (p == q || q == p - 1) {
+                return i;
+            }
+        }
+        return 0;
+    }
+}
