@@ -5,20 +5,7 @@ class Solution {
             return 0;
         }
         char[] ch = s.toCharArray();
-        int n = ch.length;
-        boolean[][] f = isPalindrome(ch);
         int count = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (f[i][j] == true) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-    
-    private boolean[][] isPalindrome(char[] ch) {
         int n = ch.length;  
         boolean[][] f = new boolean[n][n];
         //character centered
@@ -26,9 +13,11 @@ class Solution {
             int p = i - 1;
             int q = i + 1;
             f[i][i] = true;
+            count++;
             while (p >= 0 && q < n) {
                 if (ch[p] == ch[q]) {
                     f[p][q] = true;
+                    count++;
                 } else {
                     break;
                 }
@@ -43,6 +32,7 @@ class Solution {
             while (p >= 0 && q < n) {
                 if (ch[p] == ch[q]) {
                     f[p][q] = true;
+                    count++;
                 } else {
                     break;
                 }
@@ -50,6 +40,6 @@ class Solution {
                 q++;
             }
         }
-        return f;
+        return count;
     }
 }
