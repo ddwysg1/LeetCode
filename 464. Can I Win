@@ -1,0 +1,50 @@
+Link: https://leetcode.com/problems/can-i-win/description/
+class Solution {
+    Map<Integer, Boolean> map;
+    boolean[] used;
+    public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
+        int sum = (1 + maxChoosableInteger) * maxChoosableInteger / 2;
+        if (sum < desiredTotal) {
+            return false;
+        }
+        if (desiredTotal <= 0) {
+            return true;
+        }
+        map = new HashMap<>();
+        used = new boolean[1 + maxChoosableInteger];
+        return helper(desiredTotal);
+    }
+    
+    private boolean helper(int t) {
+        if (t <= 0) {
+            return false;
+        } 
+        int key = transform(used);
+        if (!map.containsKey(key)) {
+            for (int i = 1; i < used.length; i++) {
+                if (!used[i]) {
+                    used[i] = true;
+                    if (!helper(t - i)) {
+                        map.put(key, true);
+                        used[i] = false;
+                        return true;
+                    }
+                    used[i] = false;
+                }
+            }
+            map.put(key, false);
+        }
+        return map.get(key);
+    }
+    
+    private int transform(boolean[] used) {
+        int num = 0;
+        for (boolean b : used){
+            num <<= 1;
+            if (b) {
+                num |= 1;
+            }
+        }
+        return num;
+    }
+}
