@@ -1,0 +1,32 @@
+Link: https://leetcode.com/problems/jump-game/description/
+class Solution {
+    public boolean canJump(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return false;
+        }
+        if (nums.length == 1) {
+            return true;
+        }
+        int n = nums.length;
+        boolean[] f = new boolean[n];
+        f[0] = true;
+        int max = nums[0];
+        for (int j = 1; j <= max && j < n; j++) {
+            f[j] = true;
+        }
+        for (int i = 1; i < n; i++) {
+            if (f[i] == true) {
+                int dis = nums[i];
+                if (i + dis <= max) {
+                    continue;
+                } else {
+                    for (int j = max + 1; j <= i + dis && j < n; j++) {
+                        f[j] = true;
+                    }
+                    max = i + dis;
+                }
+            }
+        }
+        return f[n - 1];
+    }
+}
