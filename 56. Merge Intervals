@@ -1,0 +1,62 @@
+Link: https://leetcode.com/problems/merge-intervals/description/
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public List<Interval> merge(List<Interval> intervals) {
+        List<Interval> res = new ArrayList<>();
+        int len = intervals.size();
+        if (len == 0) {
+            return res;
+        }
+        if (len == 1) {
+            return intervals;
+        }
+        Collections.sort(intervals, new Comparator<Interval>(){
+            public int compare(Interval in1, Interval in2) {
+                if (in1.start == in2.start) {
+                    return in1.end - in2.end;
+                } else {
+                    return in1.start - in2.start;
+                }
+            }
+        });
+        //initialization
+        Interval in1 = intervals.get(0);
+        Interval in2 = intervals.get(1);
+        int start = 0;
+        if (in1.end >= in2.start) {
+            if (in1.end < in2.end) {
+                res.add(new Interval(in1.start, in2.end));
+                start = 2;
+            } else {
+                res.add(in1);
+                start = 2;
+            }
+        } else {
+                res.add(in1);
+                res.add(in2);
+                start = 2;
+        }
+        for (int i = start; i < len; i++) { 
+            int idx = res.size() - 1; 
+            Interval prev = res.get(idx);
+            Interval next = intervals.get(i);
+            if (prev.end >= next.start) {
+                if (prev.end < next.end) {
+                    res.remove(idx);
+                    res.add(new Interval(prev.start, next.end));
+                }
+            } else {
+                res.add(next);
+            }
+        }
+        return res;
+    }
+}
