@@ -1,0 +1,67 @@
+Link: https://leetcode.com/problems/spiral-matrix/description/
+class Coor{
+    int x;
+    int y;
+    public Coor(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+public class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return res;
+        }
+        int m = matrix.length;
+        int n = matrix[0].length;
+        boolean[][] visited = new boolean[m][n]; 
+        int direction = 0;
+        //0 - right; 1 - down; 2 - left; 3 - up;
+        int count = 0;
+        Coor pos = new Coor(0, 0);
+        res.add(matrix[pos.x][pos.y]);
+        visited[0][0] = true;
+        count++;
+        while (count < m * n) {            
+            if (direction == 0) {
+                if (pos.y == n - 1 || (pos.y < n - 1 && visited[pos.x][pos.y + 1])) {
+                    direction = 1;
+                    continue;
+                }
+                pos.y += 1;
+                res.add(matrix[pos.x][pos.y]);
+                visited[pos.x][pos.y] = true;
+                count++;
+            } else if (direction == 1) {
+                if (pos.x == m - 1 || (pos.x < m - 1 && visited[pos.x + 1][pos.y])) {
+                    direction = 2;
+                    continue;
+                }
+                pos.x += 1;
+                res.add(matrix[pos.x][pos.y]);
+                visited[pos.x][pos.y] = true;
+                count++;
+            } else if (direction == 2) {
+                if ((pos.x == m - 1 && pos.y == 0) || pos.y >= 1 && visited[pos.x][pos.y - 1]) {
+                    direction = 3;
+                    continue;
+                }
+                pos.y -= 1;
+                res.add(matrix[pos.x][pos.y]);
+                visited[pos.x][pos.y] = true;
+                count++;
+            } else if (direction == 3) {
+                if (pos.x >= 1 && visited[pos.x - 1][pos.y]) {
+                    direction = 0;
+                    continue;
+                }
+                pos.x -= 1;
+                res.add(matrix[pos.x][pos.y]);
+                visited[pos.x][pos.y] = true;
+                count++;
+            }
+        }
+        return res;
+    }
+}
