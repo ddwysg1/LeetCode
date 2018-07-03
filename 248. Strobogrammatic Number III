@@ -1,0 +1,41 @@
+Link: https://leetcode.com/problems/strobogrammatic-number-iii/description/
+class Solution {
+    public int strobogrammaticInRange(String low, String high) {
+        int count = 0;
+        List<String> res = new ArrayList<>();
+        for (int n = low.length(); n <= high.length(); n++) {
+            res.addAll(helper(n,n));
+        }
+        for (String s : res) {
+            if ((s.length() == low.length() && s.compareTo(low) < 0) || 
+                (s.length() == high.length() && s.compareTo(high) > 0)) {
+            } else {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    private  List<String> helper(int curt, int max) {
+        if (curt == 0) {
+            return new ArrayList<String>(Arrays.asList(""));
+        }
+        if (curt == 1) {
+            return new ArrayList<String>(Arrays.asList("0","1","8"));
+        }
+        List<String> res = new ArrayList<>();
+        List<String> prev = helper(curt - 2, max);
+        
+        for (int i = 0; i < prev.size(); i++) {
+            String tmp = prev.get(i);
+            if (curt != max) {
+                res.add("0" + tmp + "0");
+            }
+            res.add("1" + tmp + "1");
+            res.add("6" + tmp + "9");
+            res.add("8" + tmp + "8");
+            res.add("9" + tmp + "6");
+        }
+        return res;
+    }
+}
