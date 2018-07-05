@@ -1,0 +1,22 @@
+Link: https://leetcode.com/problems/rotate-function/description/
+class Solution {
+    public int maxRotateFunction(int[] A) {
+        if (A == null || A.length == 0) {
+            return 0;
+        }
+        int n = A.length;
+        
+        int sum = 0;
+        int F = 0;
+        for (int i = 0; i < n; i++) {
+            F += i * A[i];
+            sum += A[i];
+        }
+        int res = F;
+        for (int i = n - 1; i >= 1; i--) {
+            F = F + sum - n * A[i];
+            res = Math.max(F, res);
+        }
+        return res;
+    }
+}
