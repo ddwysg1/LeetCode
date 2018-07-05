@@ -1,0 +1,20 @@
+Link: https://leetcode.com/problems/nth-digit/description/
+class Solution {
+    public int findNthDigit(int n) {
+        if (n <= 9) {
+            return n;
+        }
+        int k = 0;
+        while (n > (int) 9 * Math.pow(10, k) * (k + 1)) {
+            n -= (int) 9 * Math.pow(10, k) * (k + 1);
+            k++;
+        }
+        int start = (int) Math.pow(10, k);
+        int idx = (n - 1) / (k + 1);
+        int num = start + idx;
+        int pos = (n - 1) % (k + 1);
+        String s = num + "";
+        char c = s.charAt(pos);
+        return Integer.parseInt("" + c);
+    }
+}
