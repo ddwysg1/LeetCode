@@ -1,0 +1,39 @@
+Link: https://leetcode.com/problems/super-pow/description/
+class Solution {
+    int DIV = 1337;
+    List<Integer> getIndex(int a) {
+        List<Integer> index = new ArrayList<>();
+        boolean[] set = new boolean[DIV];
+        int rem = a % DIV;
+        while(!set[rem]) {
+            set[rem] = true;
+            index.add(rem);
+            rem = (rem * a) % DIV;
+        }
+        return index;
+    }
+    
+    int getRem(int[] b, int m) {
+        int rem = 0;
+        for (int i = 0; i < b.length; i++) {
+            rem = (rem * 10 + b[i]) % m;
+        }
+        return rem;
+    }
+    
+    public int superPow(int a, int[] b) {
+        if (a == DIV || a == 0 || b == null || b.length == 0) {
+            return 0;
+        }
+        if (a == 1) {
+            return 1;
+        }
+        if (a > DIV) {
+            a = a % DIV;
+        }
+        List<Integer> index = getIndex(a);
+        int rem = getRem(b, index.size());
+        rem = rem == 0 ? index.size() : rem;
+        return index.get(rem - 1);
+    }
+}
