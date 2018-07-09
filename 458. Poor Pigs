@@ -1,0 +1,11 @@
+Link: https://leetcode.com/problems/poor-pigs/description/
+class Solution {
+    public int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
+        int idx = minutesToTest / minutesToDie + 1;
+        int pig = 0;
+        while(Math.pow(idx, pig) < buckets) {
+            pig++;
+        }
+        return pig;
+    }
+}
