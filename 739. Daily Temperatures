@@ -1,0 +1,34 @@
+Link: https://leetcode.com/problems/daily-temperatures/description/
+class ResultType {
+    int temp;
+    int day;
+    public ResultType(int temp, int day) {
+        this.temp = temp;
+        this.day = day;
+    }
+}
+public class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        int[] res = new int[temperatures.length];
+        Stack<ResultType> stack = new Stack<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < temperatures.length; i++) {
+            while (!stack.isEmpty() && stack.peek().temp < temperatures[i]) {
+                ResultType num = stack.pop();
+                map.put(num.day, i - num.day);
+            }
+            stack.push(new ResultType(temperatures[i], i));
+        }
+        
+        while (!stack.isEmpty()) {
+            ResultType num = stack.pop();
+            map.put(num.day, 0);
+        }
+        
+        for (int i = 0; i < res.length; i++) {
+            res[i] = map.get(i);
+        }
+        
+        return res;
+    }
+}
