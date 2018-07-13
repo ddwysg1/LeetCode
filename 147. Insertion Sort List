@@ -1,0 +1,36 @@
+Link: https://leetcode.com/problems/insertion-sort-list/description/
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        head = dummy;
+        boolean complete = false;
+        while(!complete) {
+            ListNode point = head;
+            complete = true;
+            while(point.next != null && point.next.next != null) {
+                if (point.next.val > point.next.next.val) {
+                    ListNode n2 = point.next;
+                    ListNode n4 = point.next.next.next;
+                    point.next = point.next.next;
+                    point.next.next = n2;
+                    n2.next = n4;
+                    complete = false;    
+                } 
+                point = point.next;
+            }
+        }
+        return dummy.next;
+    }
+}
