@@ -1,0 +1,18 @@
+Link: https://leetcode.com/problems/elimination-game/description/
+class Solution {
+    public int lastRemaining(int n) {
+        int step = 1;
+        int head = 1;
+        boolean left = true;
+        int remain = n;
+        while(remain > 1) {
+            if (left || remain % 2 == 1) {
+                head += step;
+            }
+            step *= 2;
+            remain /= 2;
+            left = !left;
+        }
+        return head;
+    }
+}
