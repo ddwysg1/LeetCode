@@ -1,0 +1,25 @@
+Link: https://leetcode.com/problems/valid-word-square/description/
+class Solution {
+    public boolean validWordSquare(List<String> words) {
+        int m = words.size();
+        int n = words.get(0).length();
+        if (m != n) {
+            return false;
+        }
+        for (int i = 0; i < m; i++) {
+            String s1 = words.get(i);
+            String s2 = "";
+            for (int j = 0; j < m; j++) {
+                String word = words.get(j);
+                if (word.length() >= i + 1) {
+                   s2 += words.get(j).charAt(i); 
+                }
+            }
+            if (!s1.equals(s2)) {
+                return false;
+            }
+        }
+        return true;
+        
+    }
+}
