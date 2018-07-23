@@ -1,0 +1,13 @@
+Link: https://leetcode.com/problems/construct-the-rectangle/description/
+class Solution {
+    public int[] constructRectangle(int area) {
+        int num = (int) Math.sqrt(area);
+        while (num >= 1) {
+            if (area % num == 0) {
+                return new int[]{area / num, num};
+            }
+            num--;
+        }
+        return new int[2];
+    }
+}
