@@ -1,0 +1,58 @@
+Link: https://leetcode.com/problems/largest-bst-subtree/description/
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class ResultType {
+    int size;
+    int min;
+    int max;
+    public ResultType(int size, int min, int max) {
+        this.size = size;
+        this.min = min;
+        this.max = max;
+    }
+}
+
+public class Solution {
+    public int largestBSTSubtree(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return getSize(root).size;
+    }
+    
+    private ResultType getSize(TreeNode root) {
+        if (root == null) {
+            return new ResultType(0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        }
+        ResultType left = getSize(root.left);
+        ResultType right = getSize(root.right);
+        if (left.size == 0 && right.size == 0) {
+            return new ResultType(1, root.val, root.val);
+        } else if (left.size == 0) {
+            if (root.val < right.min) {
+                return new ResultType(1 + right.size, root.val, right.max);
+            } else {
+                return new ResultType(right.size, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            }
+        } else if (right.size == 0) {
+             if (root.val > left.max) {
+                return new ResultType(1 + left.size, left.min, root.val);
+            } else {
+                return new ResultType(left.size, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            }
+        } else {
+            if (root.val > left.max && root.val < right.min) {
+                return new ResultType(1 + left.size + right.size, left.min, right.max);
+            } else {
+                return new ResultType(Math.max(left.size, right.size), Integer.MIN_VALUE, Integer.MAX_VALUE);
+            }
+        }
+    }
+}
