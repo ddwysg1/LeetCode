@@ -1,0 +1,79 @@
+Link: https://leetcode.com/problems/trapping-rain-water-ii/description/
+class ResultType implements Comparable<ResultType> {
+    int height;
+    int x;
+    int y;
+    
+    public ResultType(int height, int x, int y) {
+        this.height = height;
+        this.x = x;
+        this.y = y;
+    }
+    
+    @Override
+    public int compareTo(ResultType that) {
+        return this.height - that.height;
+    }
+}
+
+public class Solution {
+    int[] xD = {0, 0, 1, -1};
+    int[] yD = {1, -1, 0, 0};
+    int m, n;
+    
+    public int trapRainWater(int[][] heightMap) {
+        if (heightMap == null || heightMap.length == 0 || heightMap[0].length == 0) {
+            return 0;
+        }
+        Queue<ResultType> Q = new PriorityQueue<ResultType>();
+        m = heightMap.length;
+        n = heightMap[0].length;
+        boolean[][] visited = new boolean[m][n];
+        int count = 0;
+        int vol = 0;
+        for (int i = 0; i < m; i++) {
+            Q.add(new ResultType(heightMap[i][0], i, 0));
+            visited[i][0] = true;
+            Q.add(new ResultType(heightMap[i][n - 1], i, n - 1));
+            visited[i][n - 1] = true;
+            count += 2;
+        }
+        
+        for (int i = 1; i < n - 1; i++) {
+            Q.add(new ResultType(heightMap[0][i], 0, i));
+            visited[0][i] = true;
+            Q.add(new ResultType(heightMap[m - 1][i], m - 1, i));
+            visited[m - 1][i] = true;
+            count += 2;
+        }
+        while (count < m * n) {
+            ResultType cur = Q.poll();
+            int x = cur.x;
+            int y = cur.y;
+            int height = cur.height;
+            for (int i = 0; i < 4; i++) {
+                int xplus = x + xD[i];
+                int yplus = y + yD[i];
+                if (!isValid(xplus, yplus) || visited[xplus][yplus]) {
+                    continue;
+                }
+                if (height <= heightMap[xplus][yplus]) {
+                    Q.add(new ResultType(heightMap[xplus][yplus], xplus, yplus));
+                } else {
+                    Q.add(new ResultType(height, xplus, yplus));
+                    vol += height - heightMap[xplus][yplus];
+                }
+                visited[xplus][yplus] = true;
+                count++;
+            }
+        }
+        return vol;
+    }
+    
+    private boolean isValid(int x, int y) {
+        if (x < 0 || x >= m || y < 0 || y >= n) {
+            return false;
+        }
+        return true;
+    }
+}
