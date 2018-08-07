@@ -1,0 +1,41 @@
+Link: https://leetcode.com/problems/meeting-rooms-ii/description/
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+class Solution {
+    public Comparator<Interval> intComparator = new Comparator<Interval>() {
+        @Override
+        public int compare(Interval i1, Interval i2) {
+            return i1.end - i2.end;
+        }
+    };
+    
+    public int minMeetingRooms(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
+        }
+        Arrays.sort(intervals, new Comparator<Interval>() {
+            public int compare(Interval i1, Interval i2) {
+                return i1.start - i2.start;
+            }
+        });
+        Queue<Interval> Q = new PriorityQueue<>(intComparator);
+        Q.add(intervals[0]);
+        for (int i = 1; i < intervals.length; i++) {
+            Interval temp = Q.poll();
+            if (temp.end <= intervals[i].start) {
+                temp.end = intervals[i].end;
+            } else {
+                Q.add(intervals[i]);
+            }
+            Q.add(temp);
+        }
+        return Q.size();
+    }
+}
