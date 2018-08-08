@@ -1,0 +1,81 @@
+Link: https://leetcode.com/problems/merge-k-sorted-lists/description/
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+        if (lists.length == 1) {
+            return lists[0];
+        }
+        ListNode[] list1 = getFirstHalf(lists);
+        ListNode[] list2 = getSecondHalf(lists);
+        ListNode[] res = merge(list1, list2);
+        return res[0];
+    }
+    
+    private ListNode[] merge(ListNode[] list1, ListNode[] list2) {
+        if (list1.length == 1 && list2.length == 1) {
+            ListNode[] n = new ListNode[1];
+            n[0] = link(list1[0], list2[0]);
+            return n;
+        } else if (list1.length == 1) {
+            ListNode[] n2 = merge(getFirstHalf(list2), getSecondHalf(list2));
+            return merge(list1, n2);
+        } else if (list2.length == 1) {
+            ListNode[] n1 = merge(getFirstHalf(list1), getSecondHalf(list1));
+            return merge(n1, list2);
+        } else {
+            ListNode[] n1 = merge(getFirstHalf(list1), getSecondHalf(list1));
+            ListNode[] n2 = merge(getFirstHalf(list2), getSecondHalf(list2));
+            return merge(n1, n2);
+        }
+    }
+    
+    private ListNode[] getFirstHalf(ListNode[] lists) {
+        int size = lists.length;
+        ListNode[] list1 = new ListNode[size / 2];
+        for (int i = 0; i < size / 2; i++) {
+            list1[i] = lists[i];
+        }
+        return list1;
+    }
+    
+    private ListNode[] getSecondHalf(ListNode[] lists) {
+        int size = lists.length;
+        ListNode[] list2 = new ListNode[size - size / 2];
+        for (int i = 0; i < size - size / 2; i++) {
+            list2[i] = lists[i + size / 2];
+        }
+        return list2;
+    }
+    
+    private ListNode link(ListNode n1, ListNode n2) {
+        ListNode dummy = new ListNode(0);
+        ListNode head = dummy;
+        while(n1 != null && n2 != null) {
+            if (n1.val < n2.val) {
+                head.next = n1;
+                n1 = n1.next;
+                head = head.next;
+            } else {
+                head.next = n2;
+                n2 = n2.next;
+                head = head.next;
+            }
+        }
+        if (n1 == null) {
+            head.next = n2;
+        } else {
+            head.next = n1;
+        }
+        return dummy.next;
+    }
+}
