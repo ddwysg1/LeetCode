@@ -1,0 +1,78 @@
+Link: https://leetcode.com/problems/the-skyline-problem/description/
+class Building {
+    int start;
+    int end;
+    int height;
+    public Building(int start, int end, int height) {
+        this.start = start;
+        this.end = end;
+        this.height = height;
+    }
+}
+
+public class Solution {
+    public Comparator<Building> heightComparator = new Comparator<Building>() {
+        @Override
+        public int compare(Building h1, Building h2) {
+            return h2.height - h1.height;
+        }
+    };
+    
+    public Comparator<Building> orderComparator = new Comparator<Building>() {
+        @Override
+        public int compare(Building h1, Building h2) {
+            if (h1.start == h2.start) {
+                return h1.end - h2.end;
+            } else {
+                return h1.start - h2.start;
+            }
+        }
+    };
+    
+    
+    public List<int[]> getSkyline(int[][] buildings) {
+        List<int[]> res = new ArrayList<>();
+        if (buildings == null || buildings.length == 0 || buildings[0].length == 0) {
+            return res;
+        }
+        Queue<Building> B = new PriorityQueue<>(orderComparator);
+        int end = 0;
+        for (int i = 0; i < buildings.length; i++) {
+            B.offer(new Building(buildings[i][0], buildings[i][1], buildings[i][2]));
+            end = Math.max(end, buildings[i][1]);
+        }
+        int i = B.peek().start;
+        Queue<Building> Q = new PriorityQueue<>(heightComparator);
+        int height = -1;
+        while(i < end) {
+            while (!B.isEmpty() && B.peek().start == i) {
+                Q.offer(B.poll());
+            }
+            while(!Q.isEmpty() && Q.peek().end <= i) {
+                Q.poll();
+            }
+            
+            if (!Q.isEmpty() && Q.peek().height != height) {
+                res.add(new int[]{i, Q.peek().height});
+                height = Q.peek().height;
+            } else if (Q.isEmpty() && height != 0) {
+                res.add(new int[]{i, 0});
+                height = 0;
+            }
+            
+            if (!B.isEmpty() ) {
+                if (!Q.isEmpty()) {
+                    i = Q.peek().end < B.peek().start ? Q.peek().end : B.peek().start;
+                } else {
+                    i = B.peek().start;
+                }
+            } else {
+                if (!Q.isEmpty()) {
+                    i = Q.peek().end;
+                }
+            }
+        }
+        res.add(new int[]{end, 0});
+        return res;
+    }
+}
