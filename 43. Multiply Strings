@@ -1,6 +1,9 @@
 Link: https://leetcode.com/problems/multiply-strings/description/
 class Solution {
     public String multiply(String num1, String num2) {
+        if (num1 == null || num2 == null) {
+            return null;
+        }
         int m = num1.length();
         int n = num2.length();
         int i, j, product, carry;
@@ -17,7 +20,7 @@ class Solution {
         }
         StringBuilder sb = new StringBuilder();
         i = 0;
-        while (i < m + n && res[i] == 0) {
+        while (i < m + n - 1 && res[i] == 0) {
             i++;
         }
         
